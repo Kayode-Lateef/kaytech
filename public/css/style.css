@@ -345,7 +345,7 @@ a:hover {
 }
 
 /* Prelaoder */
-
+/* 
 #preloader {
   position: fixed;
   top: 0;
@@ -355,9 +355,9 @@ a:hover {
   z-index: 9999;
   overflow: hidden;
   background: #fff;
-}
+} */
 
-#preloader:before {
+/* #preloader:before {
   content: "";
   position: fixed;
   top: calc(50% - 30px);
@@ -393,7 +393,7 @@ a:hover {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
-}
+} */
 
 /*======================================
  NAVBAR
@@ -699,11 +699,13 @@ span.skills{
   margin-left: 10px;
   box-shadow: 10px 10px 3px #ccc;
 
+
 }
 
 .skill-div img{
   border-radius: 50%;
   box-shadow: 10px 10px 3px #ccc;
+
   }
 
 .skill-div-1{
@@ -711,14 +713,14 @@ span.skills{
   -webkit-animation: floatBubble 2.5s infinite;
   -webkit-animation-direction:alternate;
 }
-@-webkit-keyframes floatBubble{
+@keyframes floatBubble{
  from{
-        right:20px;
-        -webkit-animation-timing-function: ease-in;
+    left:0px;
+    -webkit-animation-timing-function: ease-in;
    }
    to {
-     right: 180px;
-      -webkit-animation-timing-function: ease-out;
+    left: 100px;
+    -webkit-animation-timing-function: ease-out;
    }
 }
  
@@ -729,12 +731,12 @@ span.skills{
 }
 @-webkit-keyframes floatBubble{
  from{
-        left:0;
-        -webkit-animation-timing-function: ease-out;
+  left:0px;
+  -webkit-animation-timing-function: ease-out;
    }
    to {
-      left: 180px;
-      -webkit-animation-timing-function: ease-in;
+    left: 0px;
+    -webkit-animation-timing-function: ease-in;
    }
 }
  
@@ -745,12 +747,12 @@ span.skills{
 }
 @-webkit-keyframes floatBubble{
  from{
-        left:0;
-        -webkit-animation-timing-function: ease-in;
+  right:0px;
+  -webkit-animation-timing-function: ease-in;
    }
    to {
-      left: 180px;
-      -webkit-animation-timing-function: ease-out;
+    left: 0px;
+    -webkit-animation-timing-function: ease-out;
    }
 }
  
@@ -765,8 +767,8 @@ span.skills{
         -webkit-animation-timing-function: ease-out;
    }
    to {
-      left: 180px;
-      -webkit-animation-timing-function: ease-in;
+    left: 0px;
+    -webkit-animation-timing-function: ease-in;
    }
 }
  
@@ -778,12 +780,12 @@ span.skills{
 
 @-webkit-keyframes floatBubble{
  from{
-        left:0;
+        left:0px;
         -webkit-animation-timing-function: ease-out;
    }
    to {
-      left: 180px;
-      -webkit-animation-timing-function: ease-in;
+    left: 0px;
+    -webkit-animation-timing-function: ease-in;
    }
 }
 
@@ -794,12 +796,12 @@ span.skills{
 }
 @-webkit-keyframes floatBubble{
  from{
-        left:0;
-        -webkit-animation-timing-function: ease-in;
+  right:0px;
+  -webkit-animation-timing-function: ease-in;
    }
    to {
-      left: 180px;
-      -webkit-animation-timing-function: ease-out;
+    left: 0px;
+    -webkit-animation-timing-function: ease-out;
    }
 }
 
@@ -811,12 +813,12 @@ span.skills{
 }
 @-webkit-keyframes floatBubble{
  from{
-        left:0;
-        -webkit-animation-timing-function: ease-in;
+  right:0px;
+  -webkit-animation-timing-function: ease-in;
    }
    to {
-      left: 180px;
-      -webkit-animation-timing-function: ease-out;
+    left: 0px;
+    -webkit-animation-timing-function: ease-out;
    }
 }
 
@@ -827,11 +829,11 @@ span.skills{
 }
 @-webkit-keyframes floatBubble{
  from{
-        left:0;
+        left:0px;
         -webkit-animation-timing-function: ease-in;
    }
    to {
-      left: 200px;
+      left: 0px;
       -webkit-animation-timing-function: ease-out;
    }
 }
