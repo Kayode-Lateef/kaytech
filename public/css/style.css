@@ -838,6 +838,21 @@ span.skills{
    }
 }
 
+.skill-div-9{
+  position: relative;
+  -webkit-animation: floatBubble 2.4s infinite;
+  -webkit-animation-direction:alternate;
+}
+@-webkit-keyframes floatBubble{
+ from{
+        left:0px;
+        -webkit-animation-timing-function: ease-in;
+   }
+   to {
+      left: 0px;
+      -webkit-animation-timing-function: ease-out;
+   }
+}
 
 /*======================================
  SERVICES
