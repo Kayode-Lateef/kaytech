@@ -14,5 +14,13 @@
     "nodemon": "^2.0.6"
   },
   "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kayode-Lateef/kaytech.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kayode-Lateef/kaytech/issues"
+  },
+  "homepage": "https://github.com/Kayode-Lateef/kaytech#readme",
   "description": ""
 }
