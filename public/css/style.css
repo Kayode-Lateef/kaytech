@@ -516,7 +516,7 @@ a:hover {
 
 .logo img{
   width: 80px;
-  height: 30px;
+  height: auto;
 }
 
 .navbar-b .navbar-nav .dropdown-item.show .dropdown-menu,
