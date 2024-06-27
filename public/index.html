@@ -1506,9 +1506,6 @@
                             <div class="validation"></div>
                           </div>
                         </div>
-                        <div class="col-md-12 mb-3">
-                          <div class="g-recaptcha" data-sitekey="6LdllAIqAAAAAI65rMRBnViDS58h5_N4qBsY-Ttj"></div> <!-- Add reCAPTCHA widget here -->
-                        </div>
                         <div class="col-md-12">
                           <button type="submit" class="button button-a button-big button-rouded">Send Message</button>
                         </div>
@@ -1573,6 +1570,26 @@
   <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 
 
+  <script src="https://www.google.com/recaptcha/api.js?render=6LdllAIqAAAAAI65rMRBnViDS58h5_N4qBsY-Ttj"></script>
+  <script>
+    document.getElementById('contactForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      grecaptcha.ready(function() {
+        grecaptcha.execute('6LdllAIqAAAAAI65rMRBnViDS58h5_N4qBsY-Ttj', {action: 'submit'}).then(function(token) {
+          // Add the token to the form
+          var recaptchaResponse = document.createElement('input');
+          recaptchaResponse.setAttribute('type', 'hidden');
+          recaptchaResponse.setAttribute('name', 'g-recaptcha-response');
+          recaptchaResponse.setAttribute('value', token);
+          document.getElementById('contactForm').appendChild(recaptchaResponse);
+
+          // Submit the form
+          document.getElementById('contactForm').submit();
+        });
+      });
+    });
+  </script>
   <!-- JavaScript Libraries -->
   <script src="lib/jquery/jquery.min.js"></script>
   <script src="lib/jquery/jquery-migrate.min.js"></script>
@@ -1591,7 +1608,6 @@
 
   <script src="js/main.js"></script>
 
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
   
 

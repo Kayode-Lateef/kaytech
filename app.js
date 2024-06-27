@@ -25,9 +25,9 @@ app.use(log);
 app.use(express.static(path.join(__dirname, "public")));
 
 // Test route to verify environment variables
-// app.get('/test-env', (req, res) => {
-//   res.send(`GMAIL_USER: ${process.env.GMAIL_USER}, GMAIL_PASS: ${process.env.GMAIL_PASS}, RECEIVER_EMAIL: ${process.env.RECEIVER_EMAIL}`);
-// });
+app.get('/test-env', (req, res) => {
+  res.send(`GMAIL_USER: ${process.env.GMAIL_USER}, GMAIL_PASS: ${process.env.GMAIL_PASS}, RECEIVER_EMAIL: ${process.env.RECEIVER_EMAIL}`);
+});
 
 // HTTP POST
 app.post("/", async function (request, response) {
@@ -39,11 +39,11 @@ app.post("/", async function (request, response) {
 
     // Verify reCAPTCHA
     try {
-        const fetch = (await import('node-fetch')).default;
+        const { default: fetch } = await import('node-fetch');
         const recaptchaRes = await fetch(recaptchaUrl, { method: 'POST' });
         const recaptchaData = await recaptchaRes.json();
 
-        if (!recaptchaData.success) {
+        if (!recaptchaData.success || recaptchaData.score < 0.5) {
             return response.status(400).json({ message: "reCAPTCHA verification failed. Please try again." });
         }
 
