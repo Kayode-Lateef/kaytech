@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const nodemailer = require("nodemailer");
+const fetch = require("node-fetch"); // to verify reCAPTCHA
 require('dotenv').config(); // For loading environment variables
 
 const app = express();
@@ -26,13 +27,31 @@ app.use(log);
 app.use(express.static(path.join(__dirname, "public")));
 
 // Test route to verify environment variables
-app.get('/test-env', (req, res) => {
-    res.send(`GMAIL_USER: ${process.env.GMAIL_USER}, GMAIL_PASS: ${process.env.GMAIL_PASS}, RECEIVER_EMAIL: ${process.env.RECEIVER_EMAIL}`);
-  });
+// app.get('/test-env', (req, res) => {
+//     res.send(`GMAIL_USER: ${process.env.GMAIL_USER}, GMAIL_PASS: ${process.env.GMAIL_PASS}, RECEIVER_EMAIL: ${process.env.RECEIVER_EMAIL}`);
+//   });
 
   
 // HTTP POST
 app.post("/", async function (request, response) {
+
+
+    console.log('Received form data:', request.body);
+
+    const recaptchaResponse = request.body['g-recaptcha-response'];
+    const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+    const recaptchaUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaResponse}`;
+
+    // Verify reCAPTCHA
+    try {
+        const recaptchaResponse = await fetch(recaptchaUrl, { method: 'POST' });
+        const recaptchaData = await recaptchaResponse.json();
+
+        if (!recaptchaData.success) {
+            return response.status(400).json({ message: "reCAPTCHA verification failed. Please try again." });
+        }
+
+
     // create reusable transporter object using the default SMTP transport
     const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
@@ -54,13 +73,17 @@ app.post("/", async function (request, response) {
         html: htmlBody
     };
 
-    try {
-        let info = await transporter.sendMail(mail);
-        console.log(`Message sent: ${info.messageId}`);
-        response.json({ message: `message sent: ${info.messageId}` });
+        try {
+            let info = await transporter.sendMail(mail);
+            console.log(`Message sent: ${info.messageId}`);
+            response.json({ message: `message sent: ${info.messageId}` });
+        } catch (err) {
+            console.error('Error occurred while sending email:', err);
+            response.status(500).json({ message: "message not sent: an error occurred; check the server's console log" });
+        }
     } catch (err) {
-        console.error(err);
-        response.status(500).json({ message: "message not sent: an error occurred; check the server's console log" });
+        console.error('Error occurred while verifying reCAPTCHA:', err);
+        response.status(500).json({ message: "reCAPTCHA verification failed. Please try again." });
     }
 });
 
