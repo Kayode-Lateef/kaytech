@@ -2,11 +2,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const nodemailer = require("nodemailer");
-const fetch = require("node-fetch"); // to verify reCAPTCHA
 require('dotenv').config(); // For loading environment variables
 
 const app = express();
-
 
 // body parser middleware
 app.use(bodyParser.urlencoded({ extended: false })); // this is to handle URL encoded data
@@ -28,14 +26,11 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Test route to verify environment variables
 // app.get('/test-env', (req, res) => {
-//     res.send(`GMAIL_USER: ${process.env.GMAIL_USER}, GMAIL_PASS: ${process.env.GMAIL_PASS}, RECEIVER_EMAIL: ${process.env.RECEIVER_EMAIL}`);
-//   });
+//   res.send(`GMAIL_USER: ${process.env.GMAIL_USER}, GMAIL_PASS: ${process.env.GMAIL_PASS}, RECEIVER_EMAIL: ${process.env.RECEIVER_EMAIL}`);
+// });
 
-  
 // HTTP POST
 app.post("/", async function (request, response) {
-
-
     console.log('Received form data:', request.body);
 
     const recaptchaResponse = request.body['g-recaptcha-response'];
@@ -44,34 +39,34 @@ app.post("/", async function (request, response) {
 
     // Verify reCAPTCHA
     try {
-        const recaptchaResponse = await fetch(recaptchaUrl, { method: 'POST' });
-        const recaptchaData = await recaptchaResponse.json();
+        const fetch = (await import('node-fetch')).default;
+        const recaptchaRes = await fetch(recaptchaUrl, { method: 'POST' });
+        const recaptchaData = await recaptchaRes.json();
 
         if (!recaptchaData.success) {
             return response.status(400).json({ message: "reCAPTCHA verification failed. Please try again." });
         }
 
+        // create reusable transporter object using the default SMTP transport
+        const transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            auth: {
+                user: process.env.GMAIL_USER, // this should be YOUR GMAIL account from environment variable
+                pass: process.env.GMAIL_PASS // this should be your password from environment variable
+            }
+        });
 
-    // create reusable transporter object using the default SMTP transport
-    const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: {
-            user: process.env.GMAIL_USER, // this should be YOUR GMAIL account from environment variable
-            pass: process.env.GMAIL_PASS // this should be your password from environment variable
-        }
-    });
-
-    var textBody = `FROM: ${request.body.name} EMAIL: ${request.body.email} SUBJECT: ${request.body.subject} MESSAGE: ${request.body.message}`;
-    var htmlBody = `<h2>Mail From Contact Form</h2><p>from: ${request.body.name} <a href="mailto:${request.body.email}">${request.body.email}</a></p> <p>${request.body.subject}</p>  <p>${request.body.message}</p>`;
-    var mail = {
-        from: process.env.GMAIL_USER, // sender address
-        to: process.env.RECEIVER_EMAIL, // list of receivers (THIS COULD BE A DIFFERENT ADDRESS or ADDRESSES SEPARATED BY COMMAS)
-        subject: "Mail From Contact Form", // Subject line
-        text: textBody,
-        html: htmlBody
-    };
+        var textBody = `FROM: ${request.body.name} EMAIL: ${request.body.email} SUBJECT: ${request.body.subject} MESSAGE: ${request.body.message}`;
+        var htmlBody = `<h2>Mail From Contact Form</h2><p>from: ${request.body.name} <a href="mailto:${request.body.email}">${request.body.email}</a></p> <p>${request.body.subject}</p>  <p>${request.body.message}</p>`;
+        var mail = {
+            from: process.env.GMAIL_USER, // sender address
+            to: process.env.RECEIVER_EMAIL, // list of receivers (THIS COULD BE A DIFFERENT ADDRESS or ADDRESSES SEPARATED BY COMMAS)
+            subject: "Mail From Contact Form", // Subject line
+            text: textBody,
+            html: htmlBody
+        };
 
         try {
             let info = await transporter.sendMail(mail);
